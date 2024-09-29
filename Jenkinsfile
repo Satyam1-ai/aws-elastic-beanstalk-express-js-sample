@@ -15,15 +15,15 @@ pipeline {
                 sh 'npm install'
             }
         }
+        stage('Install Snyk CLI') {
+            steps {
+                sh 'npm install -g snyk'  // Install Snyk CLI globally using npm
+            }
+        }
         stage('Snyk Security Scan') {
             steps {
-                script {
-                    // Use Docker with QEMU emulation for amd64 platform
-                    sh '''
-                        docker run --platform linux/amd64 -v /var/run/docker.sock:/var/run/docker.sock -e SNYK_TOKEN=${SNYK_TOKEN} snyk/snyk:docker snyk auth ${SNYK_TOKEN}
-                        docker run --platform linux/amd64 -v /var/run/docker.sock:/var/run/docker.sock -e SNYK_TOKEN=${SNYK_TOKEN} snyk/snyk:docker snyk test
-                    '''
-                }
+                sh 'snyk auth ${SNYK_TOKEN}'  // Authenticate Snyk CLI
+                sh 'snyk test'  // Run the Snyk security scan
             }
         }
         stage('Test') {
