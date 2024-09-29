@@ -18,10 +18,10 @@ pipeline {
         stage('Snyk Security Scan') {
             steps {
                 script {
-                    // Use `docker run` with platform specified to avoid architecture mismatch
+                    // Use Docker with QEMU emulation for amd64 platform
                     sh '''
-                        docker run --platform linux/arm64 -v /var/run/docker.sock:/var/run/docker.sock -e SNYK_TOKEN=${SNYK_TOKEN} snyk/snyk:docker snyk auth ${SNYK_TOKEN}
-                        docker run --platform linux/arm64 -v /var/run/docker.sock:/var/run/docker.sock -e SNYK_TOKEN=${SNYK_TOKEN} snyk/snyk:docker snyk test
+                        docker run --platform linux/amd64 -v /var/run/docker.sock:/var/run/docker.sock -e SNYK_TOKEN=${SNYK_TOKEN} snyk/snyk:docker snyk auth ${SNYK_TOKEN}
+                        docker run --platform linux/amd64 -v /var/run/docker.sock:/var/run/docker.sock -e SNYK_TOKEN=${SNYK_TOKEN} snyk/snyk:docker snyk test
                     '''
                 }
             }
