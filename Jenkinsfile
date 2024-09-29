@@ -17,9 +17,12 @@ pipeline {
         }
         stage('Snyk Security Scan') {
             steps {
-                sh 'npm install -g snyk'  // Install Snyk globally
-                sh 'snyk auth ${SNYK_TOKEN}'  // Authenticate Snyk using the API token
-                sh 'snyk test || exit 1'  // Run a Snyk security scan; fail if vulnerabilities are found
+                script {
+                    docker.image('snyk/snyk:docker').inside {
+                        sh 'snyk auth ${SNYK_TOKEN}'  // Authenticate Snyk using the API token
+                        sh 'snyk test || exit 1'  // Run a Snyk security scan; fail if vulnerabilities are found
+                    }
+                }
             }
         }
         stage('Test') {
