@@ -18,10 +18,11 @@ pipeline {
         stage('Snyk Security Scan') {
             steps {
                 script {
-                    docker.image('snyk/snyk:docker').inside {
-                        sh 'snyk auth ${SNYK_TOKEN}'  // Authenticate Snyk using the API token
-                        sh 'snyk test || exit 1'  // Run a Snyk security scan; fail if vulnerabilities are found
-                    }
+                    docker.image('snyk/snyk:docker')
+                        .inside('--entrypoint=""') {  // Override the default entry point
+                            sh 'snyk auth ${SNYK_TOKEN}'  // Authenticate Snyk using the API token
+                            sh 'snyk test || exit 1'  // Run a Snyk security scan; fail if vulnerabilities are found
+                        }
                 }
             }
         }
