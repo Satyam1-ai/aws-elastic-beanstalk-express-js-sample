@@ -18,12 +18,11 @@ pipeline {
         stage('Snyk Security Scan') {
             steps {
                 script {
-                    // Using Snyk Docker image directly to scan the application
-                    docker.image('snyk/snyk:docker')
-                        .inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-                            sh 'snyk auth ${SNYK_TOKEN}'  // Authenticate Snyk using the API token
-                            sh 'snyk test || exit 1'  // Run a Snyk security scan; fail if vulnerabilities are found
-                        }
+                    // Use `docker run` to directly run Snyk without nesting containers
+                    sh '''
+                        docker run -v /var/run/docker.sock:/var/run/docker.sock -e SNYK_TOKEN=${SNYK_TOKEN} snyk/snyk:docker snyk auth ${SNYK_TOKEN}
+                        docker run -v /var/run/docker.sock:/var/run/docker.sock -e SNYK_TOKEN=${SNYK_TOKEN} snyk/snyk:docker snyk test
+                    '''
                 }
             }
         }
@@ -44,4 +43,3 @@ pipeline {
         }
     }
 }
-
