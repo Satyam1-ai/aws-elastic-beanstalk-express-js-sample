@@ -1,12 +1,12 @@
-# AWS Elastic Beanstalk Node.js Sample App
+# AWS Elastic Beanstalk Node.js Sample – My Adaptation
 
-This repository contains a sample Node.js web application built using [Express](https://expressjs.com/), meant to be used as part of the AWS DevOps Learning Path.
+This repository is a **fork** of the official  
+[AWS Elastic Beanstalk Express.js sample](https://github.com/aws-samples/aws-elastic-beanstalk-express-js-sample).
 
-## Security
+## What I Did
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
-
-## License
-
-This library is licensed under the MIT-0 License. See the LICENSE file.
-
+- Used the sample as a base to understand deployment of Node.js apps on **AWS Elastic Beanstalk**.
+- Modified application configuration and messages for my environment and coursework.
+- Integrated with my **Jenkins + Docker-in-Docker** setup:
+  - Added/updated `buildspec.yml` for **AWS CodeBuild**.
+  - Used a `Jenkinsfile` in a separate repo to build, test, scan (Snyk), and deploy this app.
